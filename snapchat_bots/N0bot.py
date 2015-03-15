@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-fbstory bot - a snapchat bot for the school of the Francs-Bourgeois
+n0Bot - A bot for me, my friends and the world
 Copyright (C) 2014  N07070
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ credit = """\n
 |                    * FbStoryBot V3*                     |
 |                       by N07070                         |
 |---------------------------------------------------------|"""
-class FbStoryBot(SnapchatBot):
+class n0bot(SnapchatBot):
 
     # Say hi if the user added me
     def on_friend_add(self, friend):
@@ -115,7 +115,7 @@ class FbStoryBot(SnapchatBot):
         
         
 if __name__ == '__main__':
-    parser = ArgumentParser('FbStory Bot')
+    parser = ArgumentParser('n0bot')
     parser.add_argument('-u', '--username', required=True, type=str,help='Username of the account to run the bot on')
     parser.add_argument('-p', '--password', required=True, type=str,help='Password of the account to run the bot on')
     parser.add_argument('-msg', '--message', required=False, type=str,help='Text you want to send as a message')
@@ -124,7 +124,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    bot = FbStoryBot(args.username, args.password)
+    bot = n0bott(args.username, args.password)
     #Lister tout les utilisateurs puis le nombre d'utilisateurs.
     bot.log(credit)
     bot.log("I have "+str(len(bot.get_friends()))+" friends !")

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 n0Bot - A bot for me, my friends and the world
-Copyright (C) 2014  N07070
+Copyright (C) 2015  N07070
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@ Copyright (C) 2014  N07070
 from snapchat_bots import SnapchatBot, Snap
 from argparse import ArgumentParser
 import os, sys, time
-sys.path.insert(0, '/media/HDD/Code/Python/SnapchatBot/snapchat_bots')
-from utils import guess_type
+
 
 credit = """\n
 |---------------------------------------------------------|

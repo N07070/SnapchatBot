@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    bot = n0bott(args.username, args.password)
+    bot = n0bot(args.username, args.password)
     #Lister tout les utilisateurs puis le nombre d'utilisateurs.
     bot.log(credit)
     bot.log("I have "+str(len(bot.get_friends()))+" friends !")

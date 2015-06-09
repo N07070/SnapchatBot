@@ -1,10 +1,10 @@
-import subprocess, uuid
+import subprocess, uuid, os
 from PIL import Image
 from StringIO import StringIO
 
-from utils import guess_type, create_temporary_file, get_video_duration, resize_image, file_extension_for_type
+from utils import guess_type, create_temporary_file, get_video_duration, resize_image, file_extension_for_type, default_filename_for_snap, cmd_exists, extract_zip_components
 from constants import MEDIA_TYPE_IMAGE, MEDIA_TYPE_VIDEO, MEDIA_TYPE_VIDEO_WITHOUT_AUDIO, DEFAULT_DURATION, SNAP_IMAGE_DIMENSIONS
-from exceptions import UnknownMediaType
+from exceptions import UnknownMediaType, CannotOpenFile
 
 class Snap(object):
     @staticmethod
@@ -36,14 +36,38 @@ class Snap(object):
         resize_image(img, f.name)
         return Snap(path=f.name, media_type=MEDIA_TYPE_IMAGE, duration=duration)
 
-    def upload(self, bot):
-        self.media_id = bot.client.upload(self.file.name)
-        self.uploaded = True
+    def is_image(self):
+        return media_type is MEDIA_TYPE_IMAGE
+
+    def is_video(self):
+        return media_type is MEDIA_TYPE_VIDEO or media_type is MEDIA_TYPE_VIDEO_WITHOUT_AUDIO
+
+    def open(self):
+        if not cmd_exists("open"):
+            raise CannotOpenFile("Cannot open file")
+
+        subprocess.Popen(["open", self.file.name])
+ 
+    def save(self, output_filename = None, dir_name = "."):
+        if output_filename is None:
+            output_filename = default_filename_for_snap(self)
+        
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
+
+        with open(os.path.join(dir_name, output_filename), 'wb') as f:
+            data = self.file.file.read(8192)
+            while data:
+                f.write(data)
+                data = self.file.file.read(8192)
 
     def __init__(self, **opts):
         self.uploaded = False
         self.duration = opts['duration']
         self.media_type = opts['media_type']
+
+        if opts.get("is_story", False):
+            self.story_id = opts['snap_id']
 
         if 'sender' in opts:
             self.sender = opts['sender']
@@ -55,18 +79,22 @@ class Snap(object):
             self.from_me = True
 
         if 'data' in opts:
-            self.media_type = opts['media_type']
+            data = opts['data']
 
-            suffix = "." + file_extension_for_type(opts['media_type'])
+            if data[0:2] == 'PK':
+                video_filename, _ = extract_zip_components(data)
+                self.file = open(video_filename, 'rb+')
 
-            self.file = create_temporary_file(suffix)
+            else:
+                suffix = file_extension_for_type(opts['media_type'])
+                self.file = create_temporary_file(suffix)
 
             if self.media_type is MEDIA_TYPE_VIDEO or self.media_type is MEDIA_TYPE_VIDEO_WITHOUT_AUDIO:
-                self.file.write(opts['data'])
+                self.file.write(data)
                 self.file.flush()
 
             else:
-                image = Image.open(StringIO(opts['data']))
+                image = Image.open(StringIO(data))
                 resize_image(image, self.file.name)
 
         else:

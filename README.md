@@ -1,4 +1,6 @@
-# SnapchatBot: Python library for building bots that live on Snapchat
+![SnapchatBot](http://i.imgur.com/s8XADUn.png?1)
+
+# SnapchatBot: A library for making bots that live on Snapchat
 
 Introducing SnapchatBot, an easy way to program Snapchat accounts to do anything you want.
 SnapchatBot can be used to create image-based notification services, chatbots, search interfaces,
@@ -15,7 +17,13 @@ Sends back everything you send it.
 *(source at examples/storifierbot.py)*
 
 Takes all the snaps sent to it and adds them to its story. It can be used to collect responses
-from multiple people around a single theme, much like a Twitter hashtag.
+from multiple people around a single theme, much like a Twitter
+hashtag.
+
+#### The Capture Bot (by [EthanBlackburn](https://github.com/EthanBlackburn))
+*(source at examples/capturebot.py)*
+
+Saves all snaps received to the current working directory.
 
 #### The Auto-Welcomer Bot
 *(source at examples/autowelcomebot.py)*
@@ -42,16 +50,16 @@ Posts popular GIFs taken from the [Giphy](http://giphy.com) home page to its sto
 
 When you add the Connector to your friends, it links you with a stranger who's also added it. Every snap sent to the Connector will then arrive at the stranger's inbox, and all snaps sent from the stranger to the Connector will come to you. It's like ChatRoulette on Snapchat.
 
-#### The Capture Bot (by [EthanBlackburn](https://github.com/EthanBlackburn))
-*(source at examples/capturebot.py)*
+#### The Rando Bot (by [PhlexPlexico](https://github.com/Phlexplexico))
+*(source at examples/randobot.py)*
 
-Saves all snaps received to the current working directory.
+When you add RandoBot to your friends, it throws you in a list of people who've also added it. When you send it a snap, it will send your snap to a random person in the list. Similar to the [Rando](http://techcrunch.com/2014/03/22/rip-rando/) app.
 
 ## Installation
 
     $ python setup.py install
 
-You also need to have [ffmpeg](https://www.ffmpeg.org/) and [ImageMagick](http://www.imagemagick.org/) installed.
+You also need to have [ffmpeg](https://www.ffmpeg.org/), [ImageMagick](http://www.imagemagick.org/), and [libjpeg](http://libjpeg.sourceforge.net/) installed.
 
 ## How to build your own bots
 
@@ -62,6 +70,9 @@ You also need to have [ffmpeg](https://www.ffmpeg.org/) and [ImageMagick](http:/
 * `SnapchatBot#delete_friend(username)` -- deletes user with username `username` from the bot's friends
 * `SnapchatBot#block(username)` -- blocks user with username `username`
 * `SnapchatBot#get_snaps(mark_viewed = True)` -- gets snaps in the bot's inbox that haven't been viewed yet (use `mark_viewed = False` as a keyword argument if you don't want the bot to mark every snap received as viewed)
+* `SnapchatBot#get_my_stories()` -- gets all snaps in the bot's story
+* `SnapchatBot#get_friend_stories()` -- gets all the stories of the bot's friends
+* `SnapchatBot#clear_stories()` -- deletes all the bot's stories
 * `SnapchatBot#mark_viewed(snap)` -- marks `snap` as viewed
 * `SnapchatBot#get_friends()` -- gets the bot's friends
 * `SnapchatBot#get_added_me()` -- gets all users that have added the bot to their friends
